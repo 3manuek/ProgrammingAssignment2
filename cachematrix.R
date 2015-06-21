@@ -1,38 +1,38 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Caching the Inv Matrix of a existent square/inversible  matrix
 
-# source("cachematrix.R")
-# x <- matrix(rnorm(4), ncol=2)
-# z <- makeCacheMatrix(x)
-# cacheSolve(z)
-
-## Write a short comment describing this function
+## Receives a matrix and built a set of functions for it
 
 makeCacheMatrix <- function(x = matrix()) {
         m <- NULL
+
+        # Added, not used 
+        check <- function() { 
+                   class(try(solve(x),silent=T))=="matrix" 
+        } 
         set <- function(y) {
                 x <<- y
                 m <<- NULL
         }
         get <- function() x
-        setInvMatrix <- function(mean) m <<- mean
+        setInvMatrix <- function(invMatrix) m <<- invMatrix
         getInvMatrix <- function() m
         list(set = set, get = get,
              setInvMatrix = setInvMatrix,
-             getInvMatrix = getInvMatrix)
+             getInvMatrix = getInvMatrix,
+             check = check )
 }
 
 
-## Write a short comment describing this function
+## Solves and caches the Inverse of the matrix.
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
         m <- x$getInvMatrix()
-        if(!is.null(m)) {
+        if(!is.null(m) & (x$check()) ) {
                 message("getting cached data")
                 return(m)
         }
-        #data <- x$get()
+        
         m <- solve(x$get())
         x$setInvMatrix(m)
         m
